@@ -14,3 +14,8 @@ export const changeCongestion = (level) => {
 			return '알 수 없음';
 	}
 };
+
+
+export const getCurrentDate = () => {
+  return new Date().toISOString().slice(0, 10).replaceAll("-", "");
+}
