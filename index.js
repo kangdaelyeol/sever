@@ -3,7 +3,7 @@ import cors from 'cors';
 import morgan from 'morgan';
 import helmet from 'helmet';
 import { postCongestion } from './controller/congestion.js';
-import { postFcst } from './controller/fcst.js';
+import { postUltraVilageFcst, postMidFcst } from './controller/fcst.js';
 import dotenv from 'dotenv';
 
 dotenv.config();
@@ -18,7 +18,7 @@ app.use(cors());
 app.use(morgan('tiny'));
 
 app.post('/congestion', postCongestion);
-app.get('/fcst', postFcst);
+app.get('/fcst', postMidFcst);
 
 app.listen(PORT, () => {
 	console.log(PORT, 'tlqkf');
