@@ -18,7 +18,7 @@ import { changeCongestion } from './factory.js';
 export const postCongestion = async (req, res, next) => {
 	try {
 		const result = await axios(
-			`https://api.odcloud.kr/api/getAPRTPsgrCongestion/v1/aprtPsgrCongestion​?page=1&perPage=10&serviceKey=${process.env.API_KEY}`
+			`https://api.odcloud.kr/api/getAPRTPsgrCongestion/v1/aprtPsgrCongestion​?page=1&perPage=10&serviceKey=${encodeURIComponent(process.env.API_KEY)}`
 		);
 		const data = result.data.data;
 		const gmpInfo = { congestion: '', time: '' };
