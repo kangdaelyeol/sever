@@ -5,6 +5,7 @@ import helmet from 'helmet';
 import { postCongestion } from './controller/congestion.js';
 import { postUltraVilageFcst, postMidFcst } from './controller/fcst.js';
 import dotenv from 'dotenv';
+import { postParking } from './controller/parking.js';
 
 dotenv.config();
 
@@ -18,7 +19,8 @@ app.use(cors());
 app.use(morgan('tiny'));
 
 app.post('/congestion', postCongestion);
-app.get('/fcst', postMidFcst);
+app.post('/fcst', postMidFcst);
+app.post('/parking', postParking);
 
 app.listen(PORT, () => {
 	console.log(PORT, 'tlqkf');
