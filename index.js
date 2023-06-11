@@ -9,7 +9,7 @@ import { postParking } from './controller/parking.js';
 
 dotenv.config();
 
-const PORT = 8050;
+const PORT = process.env.PORT || 8050;
 
 const app = express();
 
