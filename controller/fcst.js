@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { getCurrentDate } from './factory.js';
+import { getCurrentDate, getTimeFc } from './factory.js';
 const BaseUrl = 'http://apis.data.go.kr/1360000/VilageFcstInfoService_2.0';
 const UltraBaseUrl = BaseUrl + '/getUltraSrtFcst';
 const VilageBaseUrl = BaseUrl + '/getVilageFcst';
@@ -76,15 +76,29 @@ export const postMidFcst = async (req, res, next) => {
 	const BaseParams = {
 		serviceKey: decodeURIComponent(process.env.API_KEY),
 		dataType: "JSON",
-		tmFc: "202306110600", // 0600, 1800
-		regId: GmpId
+		tmFc: getTimeFc(), // 0600, 1800
 	};
-	const GmpUrl = MidFcstBaseUrl + "?" + new URLSearchParams(BaseParams);
-	const result = await axios(GmpUrl);
-	console.log(result.data);
-	const data = result.data.response.body.items.item;
-	console.log(data);
-	// rnSt6Am -> 7일 뒤 강수 확률(오전) 그냥 오전으로 리턴 하자잉
-	// wf7Am -> 7일 뒤 날씨 예보(맑음 | 구름많음 | 흐림 | ...)
-	return res.end();
+
+	const GmpParams = {...BaseParams, regId: GmpId};
+	const CjuParams = {...BaseParams, regId: CjuId};
+	const GmpUrl = MidFcstBaseUrl + "?" + new URLSearchParams(GmpParams);
+	const CjuUrl = MidFcstBaseUrl + "?" + new URLSearchParams(CjuParams);
+	const [GmpResult, CjuResult] = await Promise.all([
+		axios(GmpUrl),
+		axios(CjuUrl)
+	]);
+	const GmpData = GmpResult.data.response.body.items.item[0];
+	const CjuData = CjuResult.data.response.body.items.item[0];
+	const GmpInfo = {
+		fcst: GmpData.wf7Am,
+		precipitation: GmpData.rnSt6Am
+	}
+	const CjuInfo = {
+		fcst: CjuData.wf7Am,
+		precipitation: CjuData.rnSt6Am
+	}
+	return res.status(200).json({
+		GmpInfo,
+		CjuInfo
+	});
 }
