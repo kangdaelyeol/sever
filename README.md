@@ -9,6 +9,7 @@
 #### ROUTE
  - /fcst => 중기 예보 (1주일 뒤) 정보
     **return data example**
+    ```
         {
           "GmpInfo": { // 김포공항 정보
               "fcst": "맑음", // 예보
@@ -19,9 +20,11 @@
               "precipitation": 30 
           }
         }
+    ```
 ---
  - /congestion => 공항 혼잡도 정보
     **return data example**
+    ```
         {
             "gmp": {
                 "congestion": "원활", // 혼잡도
@@ -32,9 +35,11 @@
                 "time": "20:55"
             }
         }
+    ```
 -------
  - /parking => 주차장 자리 정보
     **return data example**
+    ```
         {
             "gmp": [ // 김포 공항
                 {
@@ -81,3 +86,4 @@
                 }
             ]
         }
+    ```
