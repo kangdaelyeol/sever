@@ -4,8 +4,8 @@ const BaseUrl = 'http://apis.data.go.kr/1360000/VilageFcstInfoService_2.0';
 const UltraBaseUrl = BaseUrl + '/getUltraSrtFcst';
 const VilageBaseUrl = BaseUrl + '/getVilageFcst';
 
-const MidFcstBaseUrl = "http://apis.data.go.kr/1360000/MidFcstInfoService/getMidLandFcst";
-
+const MidFcstBaseUrl =
+	'http://apis.data.go.kr/1360000/MidFcstInfoService/getMidLandFcst';
 
 /**
  * 
@@ -51,8 +51,7 @@ export const postUltraVilageFcst = async (req, res, next) => {
 	const VilageGmpUrl = VilageBaseUrl + '?' + GmpParams;
 	const VilageCjuUrl = VilageBaseUrl + '?' + CjuParams;
 
-
-/* When you use 초단기, 단기 API, you can use it. */
+	/* When you use 초단기, 단기 API, you can use it. */
 	// const [U_G_result, U_C_result, V_G_result, V_C_result] = await Promise.all([
 	// 	axios(UltraGmpUrl),
 	// 	axios(UltraCjuURL),
@@ -62,43 +61,39 @@ export const postUltraVilageFcst = async (req, res, next) => {
 	// console.log(V_C_result?.data?.response?.body?.items?.item);
 	// console.log(V_C_result.data);
 
-
 	return res.end();
 };
 
-
-
-
 export const postMidFcst = async (req, res, next) => {
-	const GmpId = "11B00000";
-	const CjuId = "11G00000";
+	const GmpId = '11B00000';
+	const CjuId = '11G00000';
 
 	const BaseParams = {
 		serviceKey: decodeURIComponent(process.env.API_KEY),
-		dataType: "JSON",
+		dataType: 'JSON',
 		tmFc: getTimeFc(), // 0600, 1800
 	};
 
-	const GmpParams = {...BaseParams, regId: GmpId};
-	const CjuParams = {...BaseParams, regId: CjuId};
-	const GmpUrl = MidFcstBaseUrl + "?" + new URLSearchParams(GmpParams);
-	const CjuUrl = MidFcstBaseUrl + "?" + new URLSearchParams(CjuParams);
+	const GmpParams = { ...BaseParams, regId: GmpId };
+	const CjuParams = { ...BaseParams, regId: CjuId };
+	const GmpUrl = MidFcstBaseUrl + '?' + new URLSearchParams(GmpParams);
+	const CjuUrl = MidFcstBaseUrl + '?' + new URLSearchParams(CjuParams);
 	const [GmpResult, CjuResult] = await Promise.all([
 		axios(GmpUrl),
-		axios(CjuUrl)
+		axios(CjuUrl),
 	]);
 	const GmpData = GmpResult.data.response.body.items.item[0];
 	const CjuData = CjuResult.data.response.body.items.item[0];
 	const GmpInfo = {
 		fcst: GmpData.wf7Am,
-		precipitation: GmpData.rnSt6Am
-	}
+		precipitation: GmpData.rnSt6Am,
+	};
 	const CjuInfo = {
 		fcst: CjuData.wf7Am,
-		precipitation: CjuData.rnSt6Am
-	}
+		precipitation: CjuData.rnSt6Am,
+	};
 	return res.status(200).json({
 		GmpInfo,
-		CjuInfo
+		CjuInfo,
 	});
-}
+};

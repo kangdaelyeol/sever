@@ -15,11 +15,23 @@ import { changeCongestion } from './factory.js';
 	}
  * }
  */
+const BaseUrl =
+	'https://api.odcloud.kr/api/getAPRTPsgrCongestion/v1/aprtPsgrCongestion';
 export const postCongestion = async (req, res, next) => {
+	console.log(process.env.PARKING_API_KEY)
+	if (!process.env.API_KEY) {
+		throw new Error('Invalid API key');
+	}
+	console.log(process.env.API_KEY);
 	try {
-		const result = await axios(
-			`https://api.odcloud.kr/api/getAPRTPsgrCongestion/v1/aprtPsgrCongestion​?page=1&perPage=10&serviceKey=${encodeURIComponent(process.env.API_KEY)}`
-		);
+		const params = {
+			page: 1,
+			perPage: 10,
+			serviceKey: process.env.API_KEY,
+		};
+		const reqUrl = BaseUrl + '\u200B' + '?' + new URLSearchParams(params);
+		// req axios
+		const result = await axios.get(process.env.CON_URL);
 		const data = result.data.data;
 		const gmpInfo = { congestion: '', time: '' };
 		const cjuInfo = { congestion: '', time: '' };
@@ -39,7 +51,7 @@ export const postCongestion = async (req, res, next) => {
 
 		return res.status(200).json({ gmp: gmpInfo, cju: cjuInfo });
 	} catch (e) {
-		console.log(e);
+		console.log('error');
 		return res.end();
 	}
 };

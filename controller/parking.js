@@ -8,7 +8,7 @@ export const postParking = async (req, res, next) => {
 		serviceKey: process.env.PARKING_API_KEY,
 	};
 	const reqUrl = BaseUrl + '?' + new URLSearchParams(params);
-	const result = await axios(reqUrl);
+	const result = await axios.get(reqUrl);
 	const data = result.data.response.body.items.item;
 	const gimpoInfo = [];
 	const jejuInfo = [];
@@ -16,7 +16,6 @@ export const postParking = async (req, res, next) => {
 		if (item.aprKor === '제주국제공항') jejuInfo.push(item);
 		if (item.aprKor === '김포국제공항') gimpoInfo.push(item);
 	});
-
 	console.log(gimpoInfo);
 	console.log(jejuInfo);
 	const gmp = gimpoInfo.map((v) => {
