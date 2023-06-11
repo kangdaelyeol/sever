@@ -7,7 +7,9 @@ import { postUltraVilageFcst, postMidFcst } from './controller/fcst.js';
 import dotenv from 'dotenv';
 import { postParking } from './controller/parking.js';
 
-dotenv.config();
+if(process.env.NODE_ENV !== "production"){
+	dotenv.config();
+}
 
 const PORT = process.env.PORT || 8050;
 
