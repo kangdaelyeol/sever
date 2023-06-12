@@ -1,4 +1,13 @@
-# preflight API
+# Preflight API
+
+Table of Contents
+
+1. [How to Use](#how-to-use)
+2. [APIs](#apis)
+3. [Routes](#routes)
+   - [Forecast API](#forecast-api)
+   - [Congestion API](#congestion-api)
+   - [Parking API](#parking-api)
 
 ## HOW TO USE ?
 
@@ -8,91 +17,120 @@
 
 - BASEURL: https://flightserver.herokuapp.com
 
-#### ROUTE
+## Routes
 
-- /fcst => 중기 예보 (1주일 뒤) 정보
-  - required: body: {"startDate": "20230612"} // startdate -> 출발 일자
-  - 설명: 출발일자(startDate)가 현재 기준 3~7일 이후인 경우 해당 출발자에 대한 예보 정보 제공.
-  - **return data example**
-  ```
-      {
-        "GmpInfo": { // 김포공항 정보
-            "fcst": "맑음", // 예보
-          "precipitation": 0 // 강수 확률
-        },
-        "CjuInfo": { // 제주공항 정보
-            "fcst": "구름많음",
-            "precipitation": 30
-        }
-      }
-  ```
+### Forecast API
+
+Route: `/fcst`
+
+**Required**: Body: `{"startDate": "20230612"}` (StartDate is the departure date)
+
+**description**: 출발일자(startDate)가 현재 기준 3~7일 이후인 경우 해당 출발자에 대한 예보 정보 제공.
+
+**Example of returned data**:
+
+```json
+{
+	"GmpInfo": {
+		// 김포공항 정보
+		"fcst": "맑음", // 예보
+		"precipitation": 0 // 강수 확률
+	},
+	"CjuInfo": {
+		// 제주공항 정보
+		"fcst": "구름많음",
+		"precipitation": 30
+	}
+}
+```
+
+**출발일자랑 현재 일자가 3일 미만 || 7일 초과인경우**
+
+```
+  null
+```
+
+**API 제공 서버 오류인 경우**
+
+```json
+{ "error": "API 서버 에러" }
+```
 
 ---
 
-- /congestion => 공항 혼잡도 정보
-  - **return data example**
-    ```
-        {
-            "gmp": {
-                "congestion": "원활", // 혼잡도
-                "time": "20:55" // 기준 시각
-            },
-            "cju": {
-                "congestion": "보통",
-                "time": "20:55"
-            }
-        }
-    ```
+### Congestion API
+
+Route: `/congestion`
+
+**Example of returned data**:
+
+```json
+{
+	"gmp": {
+		"congestion": "원활", // 혼잡도
+		"time": "20:55" // 기준 시각
+	},
+	"cju": {
+		"congestion": "보통",
+		"time": "20:55"
+	}
+}
+```
 
 ---
 
-- /parking => 주차장 자리 정보
-  - **return data example**
-  ```
-      {
-          "gmp": [ // 김포 공항
-              {
-                  "name": "국내선 제1주차장", // 공항 이름
-                  "full": 2279, // 전체 주차장 좌석 수
-                  "remain": 1683 // 남은 주차장 좌석 수
-              },
-              {
-                  "name": "국내선 제2주차장",
-                  "full": 1733,
-                  "remain": 725
-              },
-              {
-                  "name": "국제선 주차빌딩",
-                  "full": 567,
-                  "remain": 394
-              },
-              {
-                  "name": "국제선 지하",
-                  "full": 1200,
-                  "remain": 903
-              },
-              {
-                  "name": "화물청사",
-                  "full": 737,
-                  "remain": 249
-              }
-          ],
-          "cju": [
-              {
-                  "name": "P1주차장",
-                  "full": 1830,
-                  "remain": 1697
-              },
-              {
-                  "name": "P2장기주차장",
-                  "full": 486,
-                  "remain": 275
-              },
-              {
-                  "name": "화물주차장",
-                  "full": 732,
-                  "remain": 378
-              }
-          ]
-      }
-  ```
+### Parking API
+
+Route: `/parking`
+
+**Example of returned data**:
+
+```json
+{
+	"gmp": [
+		// 김포 공항
+		{
+			"name": "국내선 제1주차장", // 공항 이름
+			"full": 2279, // 전체 주차장 좌석 수
+			"remain": 1683 // 남은 주차장 좌석 수
+		},
+		{
+			"name": "국내선 제2주차장",
+			"full": 1733,
+			"remain": 725
+		},
+		{
+			"name": "국제선 주차빌딩",
+			"full": 567,
+			"remain": 394
+		},
+		{
+			"name": "국제선 지하",
+			"full": 1200,
+			"remain": 903
+		},
+		{
+			"name": "화물청사",
+			"full": 737,
+			"remain": 249
+		}
+	],
+	"cju": [
+		{
+			"name": "P1주차장",
+			"full": 1830,
+			"remain": 1697
+		},
+		{
+			"name": "P2장기주차장",
+			"full": 486,
+			"remain": 275
+		},
+		{
+			"name": "화물주차장",
+			"full": 732,
+			"remain": 378
+		}
+	]
+}
+```
