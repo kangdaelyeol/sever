@@ -68,6 +68,11 @@ export const postMidFcst = async (req, res, next) => {
 	const GmpId = '11B00000';
 	const CjuId = '11G00000';
 
+	const { startDate } = req.body;
+	const currentDate = getCurrentDate();
+	const gap = Number(startDate) - Number(currentDate);
+	const dateGap = gap > 7 ? 7 : gap < 3 ? 3 : gap;
+	console.log(dateGap);
 	const BaseParams = {
 		serviceKey: decodeURIComponent(process.env.API_KEY),
 		dataType: 'JSON',
@@ -82,15 +87,20 @@ export const postMidFcst = async (req, res, next) => {
 		axios(GmpUrl),
 		axios(CjuUrl),
 	]);
-	const GmpData = GmpResult.data.response.body.items.item[0];
-	const CjuData = CjuResult.data.response.body.items.item[0];
+	const GmpData = GmpResult?.data?.response?.body?.items?.item[0];
+	const CjuData = CjuResult?.data?.response?.body?.items?.item[0];
+	if (!GmpData || !CjuData) {
+		return res.status(400).json({
+			error: 'API 서버 에러',
+		});
+	}
 	const GmpInfo = {
-		fcst: GmpData.wf7Am,
-		precipitation: GmpData.rnSt6Am,
+		fcst: GmpData[`wf${dateGap}Am`],
+		precipitation: GmpData[`rnSt${dateGap}Am`],
 	};
 	const CjuInfo = {
-		fcst: CjuData.wf7Am,
-		precipitation: CjuData.rnSt6Am,
+		fcst: CjuData[`wf${dateGap}Am`],
+		precipitation: CjuData[`rnSt${dateGap}Am`],
 	};
 	return res.status(200).json({
 		GmpInfo,

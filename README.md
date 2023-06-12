@@ -8,7 +8,9 @@
 
 #### ROUTE
  - /fcst => 중기 예보 (1주일 뒤) 정보
-    **return data example**
+  - required: body: {"startDate": "20230612"} // startdate -> 출발 일자
+    - 설명: 출발일자(startDate)가 현재 기준 3~7일 이후인 경우 해당 출발자에 대한 예보 정보 제공.  
+    - **return data example**
     ```
         {
           "GmpInfo": { // 김포공항 정보
@@ -23,7 +25,7 @@
     ```
 ---
  - /congestion => 공항 혼잡도 정보
-    **return data example**
+  - **return data example**
     ```
         {
             "gmp": {
@@ -38,7 +40,7 @@
     ```
 -------
  - /parking => 주차장 자리 정보
-    **return data example**
+    - **return data example**
     ```
         {
             "gmp": [ // 김포 공항
