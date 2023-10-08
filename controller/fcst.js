@@ -71,9 +71,8 @@ export const postMidFcst = async (req, res, next) => {
 	const { startDate } = req.body;
 	const currentDate = getCurrentDate();
 	const gap = Number(startDate) - Number(currentDate);
-	if(gap > 7 || gap < 3 ) return res.status(200).json(null);
-	const dateGap = gap > 7 ? 7 : gap < 3 ? 3 : gap;
-	// console.log(dateGap);
+	if (gap > 7 || gap < 3) return res.status(200).json(null);
+	// console.log(gap);
 	const BaseParams = {
 		serviceKey: decodeURIComponent(process.env.API_KEY),
 		dataType: 'JSON',
@@ -96,12 +95,12 @@ export const postMidFcst = async (req, res, next) => {
 		});
 	}
 	const GmpInfo = {
-		fcst: GmpData[`wf${dateGap}Am`],
-		precipitation: GmpData[`rnSt${dateGap}Am`],
+		fcst: GmpData[`wf${gap}Am`],
+		precipitation: GmpData[`rnSt${gap}Am`],
 	};
 	const CjuInfo = {
-		fcst: CjuData[`wf${dateGap}Am`],
-		precipitation: CjuData[`rnSt${dateGap}Am`],
+		fcst: CjuData[`wf${gap}Am`],
+		precipitation: CjuData[`rnSt${gap}Am`],
 	};
 	return res.status(200).json({
 		GmpInfo,
